@@ -1,0 +1,514 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In/Registration</title>
+
+    <!-- Import Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <!-- link to bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--Style-->
+    <style>
+        /* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+/* Base styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+i {
+    font-size: 1.5rem;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+p[id^="warning"] {
+    color: red;
+}
+
+/*Navbar*/
+.navbar-item {
+    text-decoration: none;
+    color: #212529;
+}
+
+.navbar-item:hover {
+    color: #212529;
+}
+
+/* add padding on input */
+.text-indent {
+    text-indent: .5rem;
+}
+
+/* add password hide and show icon */
+.password__icon {
+    position: absolute;
+    right: 0;
+    padding: .9rem 1.25rem;
+    cursor: pointer;
+}
+
+/* background grey */
+.bg-grey-light {
+    background: #f0f0f0;
+}
+
+.bg-grey-light:focus {
+    background: #f0f0f0;
+}
+
+/* register default */
+.register__form {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    margin-left: -100%;
+    opacity: 0;
+    transition: margin 1s, opacity .5s;
+    z-index: 1;
+}
+
+
+/* register form active */
+.register__form.active {
+    margin-left: 0%;
+    opacity: 1;
+}
+
+
+/* login form default */
+.login__form {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    margin-left: -100%;
+    opacity: 0;
+    transition: margin 1s, opacity .5s;
+    z-index: 1;
+}
+
+
+/* login form active */
+.login__form.active {
+    opacity: 1;
+    margin-left: 0%;
+}
+
+/* Media queries */
+@media (min-width: 1024px) {
+    body {
+        overflow-y: hidden;
+    }
+
+    /* register form active */
+    .register__form.active {
+        margin-left: 10% !important;
+        opacity: 1;
+    }
+
+    /* login form active */
+    .login__form.active {
+        opacity: 1;
+        margin-left: 10% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .container .col-12.p-5 {
+        padding: 0 !important;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar position-absolute top-0 start-0 py-3 px-4 w-100" style="z-index: 900;">
+        <div class="d-flex flex-row justify-content-between w-100">
+            <ul class="px-0">
+                <a href="Home.php" class="navbar-item h5"><i class="bi bi-house-door h5"></i> Home</a>
+            </ul>
+            <ul class="px-0">
+                <a href="javascript:history.back();" class="navbar-item h2"><i class="bi bi-x"></i></a>
+            </ul>
+        </div>
+    </nav>
+    <!-- Login Section -->
+    <div class="container login__form active">
+        <div class="row vh-100 align-self-center">
+            <div class="col-12 col-lg-6 col-xl-6 pl-5">
+                <div class="row vh-100">
+                    <div class="col align-self-center p-4 w-100">
+                        <h3 class="fw-bolder">WELCOME BACK !</h3>
+                        <p class="fw-lighter fs-6">Don't have an account, <span id="signUp" role="button"
+                                class="text-primary">Sign Up</span></p>
+                        <!-- form login section -->
+                        <form action="Resources/php/login.inc.php" class="mt-4" method="post" id="login-form">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Email</label>
+                                <input type="email" name="logmail" id="logmail"
+                                    class="form-control text-indent shadow-sm bg-grey-light border-0   fw-lighter fs-7 p-3"
+                                    placeholder="name@example.com">
+                            </div>
+                            <p id="warning-logmail"></p>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Password</label>
+                                <div class="d-flex position-relative">
+                                    <input type="password" name="logpass" id="logpass"
+                                        class="form-control text-indent auth__password shadow-sm bg-grey-light border-0  fw-lighter fs-7 p-3">
+                                    <span class="password__icon text-primary fs-4 fw-bold bi bi-eye-slash"></span>
+                                </div>
+                            </div>
+                            <p id="warning-logPassword"></p>
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-outline-dark btn-lg  mt-4 w-100" id="login-submit"
+                                    value="Login">Login</button>
+                            </div>
+                        </form>
+
+                        <!--Socials-->
+                        <!--
+                        <p class="mt-5 text-center">Or Sign in with social platforms</p>
+                        <div class="row text-center">
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-google fs-5"></i></a>
+                            </div>
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-microsoft fs-5"></i></a>
+                            </div>
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-apple fs-5"></i></a>
+                            </div>
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-facebook fs-5"></i></a>
+                            </div>
+                        </div>
+                            -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Register Section -->
+    <div class="container register__form">
+        <div class="row vh-100 align-self-center">
+            <div class="d-none d-lg-block col-lg-6 col-xl-6 p-5">
+            </div>
+            <div class="col-12 col-lg-6 col-xl-6">
+                <div class="row vh-100">
+                    <div class="col align-self-center p-4 w-100 pt-5">
+                        <h3 class="fw-bolder">REGISTER HERE !</h3>
+                        <p class="fw-lighter fs-6">Have an account, <span id="signIn" role="button"
+                                class="text-primary">Sign In</span></p>
+                        <!-- form register section -->
+                        <form action="Resources/php/signup.inc.php" class="mt-4" method="post" id="signup-form">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" name="Uname" id="Uname"
+                                    class="form-control text-indent shadow-sm bg-grey-light border-0  fw-lighter fs-7 p-3"
+                                    placeholder="name">
+                            </div>
+                            <p id="warning-Uname"></p>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Email</label>
+                                <input type="email" name="email" id="email"
+                                    class="form-control text-indent shadow-sm bg-grey-light border-0  fw-lighter fs-7 p-3"
+                                    placeholder="name@example.com">
+                            </div>
+                            <p id="warning-Email"></p>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Password</label>
+                                <div class="d-flex position-relative">
+                                    <input type="password" name="pass" id="pass"
+                                        class="form-control text-indent auth__password shadow-sm bg-grey-light border-0  fw-lighter fs-7 p-3">
+                                    <span class="password__icon text-primary fs-4 fw-bold bi bi-eye-slash"></span>
+                                </div>
+                            </div>
+                            <p id="warning-Password"></p>
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-outline-dark btn-lg  mt-4 w-100" value="Sign up"
+                                    id="signup-submit">Sign Up</button>
+                            </div>
+                        </form>
+
+                        <!--Socials-->
+                        <!--
+                        <p class="mt-5 text-center">Or Sign in with social platforms</p>
+                        <div class="row text-center">
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-google fs-5"></i></a>
+                            </div>
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-microsoft fs-5"></i></a>
+                            </div>
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-apple fs-5"></i></a>
+                            </div>
+                            <div class="col">
+                                <a href="" class="btn btn-outline-dark"><i class="bi bi-facebook fs-5"></i></a>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--Scripts-->
+<!--Ajax Library-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+    </script>
+<!--SweetAlert2 Library-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!--JavaScript-->
+<script>
+    const signUp = document.querySelector("#signUp");
+    const signIn = document.querySelector("#signIn");
+    const passwordIcon = document.querySelectorAll(".password__icon");
+    const authPassword = document.querySelectorAll(".auth__password");
+
+    // when click sign up button
+    signUp.addEventListener("click", () => {
+        document.querySelector(".login__form").classList.remove("active");
+        document.querySelector(".register__form").classList.add("active");
+    });
+
+    // when click sign in button
+    signIn.addEventListener("click", () => {
+        document.querySelector(".login__form").classList.add("active");
+        document.querySelector(".register__form").classList.remove("active");
+    });
+
+    // change hidden password to visible password
+    for (var i = 0; i < passwordIcon.length; ++i) {
+        passwordIcon[i].addEventListener("click", (i) => {
+            const lastArray = i.target.classList.length - 1;
+            if (i.target.classList[lastArray] == "bi-eye-slash") {
+                i.target.classList.remove("bi-eye-slash");
+                i.target.classList.add("bi-eye");
+                i.currentTarget.parentNode.querySelector("input").type = "text";
+            } else {
+                i.target.classList.add("bi-eye-slash");
+                i.target.classList.remove("bi-eye");
+                i.currentTarget.parentNode.querySelector("input").type = "password";
+            }
+        });
+    }
+
+    //Validation
+    $(document).ready(function () {
+        //Login Script
+        $("#login-form").submit(function (event) {
+            event.preventDefault();
+            //taking values from input fields
+            var mail = $("#logmail").val();
+            var pass = $("#logpass").val();
+            var login_submit = $("#login-submit").val();
+
+            //Initialising flags
+            var mailflag = true;
+            var passflag = true;
+
+            document.getElementById("warning-logPassword").innerHTML = "";
+            document.getElementById("warning-logmail").innerHTML = "";
+
+            //Validate Email
+            if (mail.trim().length == 0) {
+                document.getElementById("warning-logmail").innerHTML = "Field cannot be empty";
+                mailflag = false;
+            }
+            else if (!(mail.match(/^[a-zA-Z][a-zA-Z0-9\-_.]+@[a-zA-Z0-9]{2,}.[a-zA-Z0-9]{2,}$/))) {
+                document.getElementById("warning-logmail").innerHTML = "Invalid Email";
+                mailflag = false;
+            }
+
+            //Validate Password
+            if (pass.trim().length == 0) {
+                document.getElementById("warning-logPassword").innerHTML = "Field cannot be empty";
+                passflag = false;
+            } else if (!(pass.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/))) {
+                document.getElementById("warning-logPassword").innerHTML = "Invalid password";
+                passflag = false;
+            }
+            
+            //Database Check
+            if (mailflag == true && passflag == true) {
+                $.ajax({
+                    url: "Resources/Php/login.inc.php",
+                    method: "post",
+                    data: {
+                        logmail: mail,
+                        logpass: pass,
+                        submit: login_submit,
+                    },
+                    success: function (response) {
+                        if (response == "sqlerror") {
+                            Swal.fire({
+                                template: '#login-error'
+                            });
+                            document.getElementById("warning-logPassword").innerHTML =
+                                "Error! Try Again";
+                        } else if (response == "success") {
+                            Swal.fire({
+                                template: '#login-success'
+                            });
+                        } else if (response == "errorNoUser") {
+                            document.getElementById("warning-logmail").innerHTML =
+                                "User with email " + mail + " does not exist!";
+                        } else if (response == "wrongPass") {
+                            document.getElementById("warning-logPassword").innerHTML =
+                                "Wrong Password! Try Again";
+                        }
+                    },
+                });
+            }
+        });
+
+
+        //Signup Script
+        $("#signup-form").submit(function (event) {
+            //when form is submitted
+            event.preventDefault();
+            //taking values from input fields
+            var uname = $("#Uname").val();
+            var email = $("#email").val();
+            var pass = $("#pass").val();
+            var signup_submit = $("#signup-submit").val();
+
+            var unameflag = true;
+            var emailflag = true;
+            var passflag = true;
+
+            document.getElementById("warning-Password").innerHTML = "";
+            document.getElementById("warning-Uname").innerHTML = "";
+            document.getElementById("warning-Email").innerHTML = "";
+
+            //Validate username
+            if (uname.trim().length == 0) {
+                document.getElementById("warning-Uname").innerHTML = "Field cannot be empty";
+                unameflag = false;
+            } else if (!uname.match(/^[a-zA-Z0-9]{3,15}$/)) {
+                document.getElementById("warning-Uname").innerHTML = "Invalid username";
+                unameflag = false;
+            }
+
+            //Validate Email
+            if (email.trim().length == 0) {
+                document.getElementById("warning-Email").innerHTML = "Field cannot be empty";
+                emailflag = false;
+            } else if (!(email.match(/^[a-zA-Z][a-zA-Z0-9\-_.]+@[a-zA-Z0-9]{2,}.[a-zA-Z0-9]{2,}$/))) {
+                document.getElementById("warning-Email").innerHTML = "Invalid Email";
+                emailflag = false;
+            }
+
+            //Validate Password
+            if (pass.trim().length == 0) {
+                document.getElementById("warning-Password").innerHTML = "Field cannot be empty";
+                passflag = false;
+            } else if (!pass.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/)) {
+                document.getElementById("warning-Password").innerHTML = "Invalid password";
+                passflag = false;
+            }
+
+            //Database Input
+            if (unameflag == true && emailflag == true && passflag == true) {
+                $.ajax({
+                    //to go to php page
+                    url: "Resources/Php/signup.inc.php",
+                    method: "post",
+                    data: {
+                        uname: uname,
+                        email: email,
+                        pwd: pass,
+                        submit: signup_submit,
+                    },
+                    success: function (response) {
+                        if (response == "errorEmailTaken") {
+                            document.getElementById("warning-Email").innerHTML = "Email already registered for another account!Try another one";
+                        } else if (response == "errorUnameTaken") {
+                            document.getElementById("warning-Uname").innerHTML = "Username already exist!";
+                        } else if (response == "sqlerror") {
+                            Swal.fire({
+                                template: '#signup-error'
+                            });
+                        } else if (response == "success") {
+                            Swal.fire({
+                                template: '#signup-success'
+                            });
+                        }
+                    },
+                });
+            }
+        });
+    });
+</script>
+
+
+<!--Login PopUp-->
+<template id="login-success">
+    <swal-title>Login Successful</swal-title>
+    <swal-icon type="success"></swal-icon>
+    <swal-button type="confirm" color="green"><a style="text-decoration:none;color:white;"
+            href="Home.php">Ok</a></swal-button>
+    <swal-param name="allowEscapeKey" value="false" />
+    <swal-param name="customClass" value='{ "popup": "my-popup" }' />
+    <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+</template>
+<!--Login_Error PopUp-->
+<template id="login-error">
+    <swal-title>LogIn Error</swal-title>
+    <swal-html>Try again in a Few Seconds</swal-html>
+    <swal-icon type="error"></swal-icon>
+    <swal-button type="confirm" color="green"><a style="text-decoration:none;color:white;" href="#">Ok</a></swal-button>
+    <swal-param name="allowEscapeKey" value="false" />
+    <swal-param name="customClass" value='{ "popup": "my-popup" }' />
+    <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+</template>
+<!--SignUp PopUp-->
+<template id="signup-success">
+    <swal-title>Account Creation Successful</swal-title>
+    <swal-icon type="success"></swal-icon>
+    <swal-button type="confirm" color="green"><a style="text-decoration:none;color:white;"
+            href="Home.php">Ok</a></swal-button>
+    <swal-param name="allowEscapeKey" value="false" />
+    <swal-param name="customClass" value='{ "popup": "my-popup" }' />
+    <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+</template>
+<!--SignUp_Error PopUp-->
+<template id="signup-error">
+    <swal-title>SignUp Error</swal-title>
+    <swal-html>Try again in a Few Seconds</swal-html>
+    <swal-icon type="error"></swal-icon>
+    <swal-button type="confirm" color="green"><a style="text-decoration:none;color:white;" href="#">Ok</a></swal-button>
+    <swal-param name="allowEscapeKey" value="false" />
+    <swal-param name="customClass" value='{ "popup": "my-popup" }' />
+    <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+</template>
+</body>
+</html>
